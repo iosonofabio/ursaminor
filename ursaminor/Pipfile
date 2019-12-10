@@ -1,0 +1,23 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = "*"
+numpy = "*"
+scipy = "*"
+sklearn = "*"
+pandas = "*"
+python-igraph = "*"
+leidenalg = {editable = true,git = "https://github.com/vtraag/leidenalg.git",ref = "develop"}
+jinja2 = "*"
+requests = "*"
+flask-wtf = "*"
+northstar = "*"
+loompy = "*"
+
+[requires]
+python_version = "3.8"

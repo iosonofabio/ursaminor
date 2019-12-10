@@ -1,0 +1,22 @@
+<head>
+ <link rel="stylesheet" href="../static/index.css">
+</head>
+
+<body>
+
+<div>
+Atlas:
+</div>
+
+<div>
+<form action="" method="POST" novalidate enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.atlas.label }}{{ form.atlas }}
+  </div>
+{{ form.fileupload }}
+{{ form.submit() }}
+</form>
+</div>
+
+</body>
