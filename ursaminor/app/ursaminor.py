@@ -14,6 +14,24 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the-one-up-in-the-sky'
 
 
+#FIXME: this can be outsourced to an external queue manager
+class NorthstarRun():
+    def __init__(self, method, **kwargs):
+        self.kwargs = kwargs
+        if method == 'average':
+            self.model = northstar.Averages(
+                **self.kwargs,
+                )
+        else:
+            self.model = northstar.Subsample(
+                **self.kwargs,
+                )
+
+    def fit(self, new_data):
+        self.model.fit(new_data)
+        self.membership = self.model.membership
+
+
 def get_atlases():
     url = 'https://raw.githubusercontent.com/northstaratlas/atlas_landmarks/master/table.tsv'
     response = requests.get(url)
@@ -35,9 +53,7 @@ def get_atlases():
 class NorthstarForm(FlaskForm):
     submit = SubmitField('northstar!')
     atlas = SelectField('Atlas')
-    fileupload = FileField(
-        'New data (TSV)',
-        )
+    fileupload = FileField('New data (TSV)')
 
     def get_atlas_choices(self):
         self.atlas.choices = [(x, x) for x in get_atlases()]
@@ -62,19 +78,22 @@ def index():
         f.save(fn)
 
         # Prepare northstar
-        model = northstar.Averages(
+        model_wrap = NorthstarRun(
+            method='average',
             atlas=form.atlas.data,
+            #FIXME
+            n_features_overdispersed=20,
             )
 
         # Read new data from file
         newdata = pd.read_csv(fn, sep='\t', index_col=0)
 
         # Classify
-        model.fit(newdata)
+        model_wrap.fit(newdata)
 
         # Format output
-        res = model.membership
-        res_string = '<\br>'.join(['Cell types:'] + list(res))
+        res = model_wrap.membership
+        res_string = '</br>'.join(['Cell types:'] + list(res))
 
         return res_string
 
