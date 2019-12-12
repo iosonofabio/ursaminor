@@ -1,0 +1,41 @@
+<head>
+ <link rel="stylesheet" href="../static/progress.css">
+</head>
+
+<body>
+
+<p>
+northstar is running:
+</p>
+
+<p>
+JOB ID: {{ jobid }}
+</p>
+
+<p>
+ENDPOINT: {{ endpoint }}
+</p>
+
+<div id="result">
+</div>
+
+
+<script>
+
+let intervalId = window.setInterval(function() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    var response = xhttp.responseText;
+    if (response != "In progress") {
+      document.getElementById("result").innerHTML = "Result:<br>" + response;
+      //clearInterval(intervalId);
+    }
+    return;
+  };
+  xhttp.open("GET", "{{ endpoint }}", true);
+  xhttp.send();
+}, 1000);
+
+</script>
+
+</body>

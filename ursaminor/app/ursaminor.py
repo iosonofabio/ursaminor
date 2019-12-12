@@ -1,17 +1,11 @@
 import os
 import time
-from multiprocessing import Process
-import numpy as np
 import pandas as pd
 
 from flask import Flask, escape, request, render_template
-from werkzeug import secure_filename
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
-from wtforms import SelectField, SubmitField, validators, ValidationError
 
-from atlas_landmarks import get_atlases
-from compute_queue import computeNorthstar
+from compute_queue import NorthstarRun
+from form import NorthstarForm
 
 
 app = Flask(__name__)
@@ -23,44 +17,6 @@ def remove_files():
         for fn in os.listdir('data/{:}'.format(fdn)):
             os.remove('data/{:}/{:}'.format(fdn, fn))
 remove_files()
-
-
-class NorthstarRun():
-    def __init__(self, method='average', **kwargs):
-        self.method = method
-        self.kwargs = kwargs
-
-    def compute_files(self, jobid=None):
-        if jobid is None:
-            jobid = np.random.randint(10000000)
-        self.logfile = 'data/logs/log_{:}.txt'.format(jobid)
-        self.outfile = 'data/results/log_{:}.txt'.format(jobid)
-        self.jobid = jobid
-
-    def fit(self, new_data):
-        global p
-        p = Process(
-            target=computeNorthstar,
-            args=(self.logfile, self.outfile, self.method, new_data),
-            kwargs=self.kwargs,
-            )
-        p.start()
-
-
-class NorthstarForm(FlaskForm):
-    submit = SubmitField('northstar!')
-    atlas = SelectField('Atlas')
-    fileupload = FileField('New data (TSV)')
-
-    def get_atlas_choices(self):
-        self.atlas.choices = [(x, x) for x in get_atlases()]
-
-    def validate_fileupload(form, field):
-        fn = secure_filename(field.data.filename)
-        fn_ext = fn.split('.')[-1]
-        if fn_ext != 'tsv':
-            raise ValidationError('Uploaded file was not TSV')
-        return True
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -88,17 +44,16 @@ def index():
         model_wrap.fit(newdata)
 
         # Format jobID for queries
-        res = model_wrap.jobid
-        res_string = 'JOB ID: {0}</br>PROGRESS ENDPOINT: /progress/{0}'.format(res)
+        jobid = model_wrap.jobid
+        endpoint = '/progress/{0}'.format(jobid)
 
-        return res_string
+        return render_template('progress.html', jobid=jobid, endpoint=endpoint)
 
     else:
         if form.errors:
             for field, errors in form.errors.items():
                 if field == 'fileupload':
                     return errors[0]
-                #print(form.atlas.data)
                 return ', '.join(errors)
         else:
             return render_template('index.html', form=form)
@@ -113,13 +68,13 @@ def progress(path):
             log = f.read()
         if 'Done' in log:
             with open(model_wrap.outfile, 'rt') as f:
-                response = '</br>'.join(f.read().split('\n'))
+                response = '<br>'.join(f.read().split('\n'))
 
             os.remove(model_wrap.logfile)
             os.remove(model_wrap.outfile)
 
+            print(response)
             return response
-
     else:
         response = 'In progress'
         return response
