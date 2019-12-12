@@ -26,22 +26,22 @@ def index():
 
     if form.validate_on_submit():
 
-        # Read in data via file
-        f = request.files['fileupload']
-        fn = 'data/input/new_data.tsv'
-        f.save(fn)
-        try:
-            newdata = pd.read_csv(fn, sep='\t', index_col=0)
-        finally:
-            os.remove(fn)
-
         model_wrap = NorthstarRun(
-            method='average',
+            method=form.method.data,
             atlas=form.atlas.data,
-            n_features_overdispersed=20,
+            n_features_per_cell_type=form.nfeact.data,
+            n_features_overdispersed=form.nfeaod.data,
+            n_pcs=form.npcs.data,
+            n_neighbors=form.nnei.data,
+            n_neighbors_out_of_atlas=form.nneia.data,
+            distance_metric='correlation',
+            threshold_neighborhood=0.8,
+            clustering_metric='cpm',
+            resolution_parameter=form.respar.data,
             )
         model_wrap.compute_files()
-        model_wrap.fit(newdata)
+        model_wrap.save_input_matrix(request.files['fileupload'])
+        model_wrap.fit()
 
         # Format jobID for queries
         jobid = model_wrap.jobid

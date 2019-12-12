@@ -1,5 +1,8 @@
 import os
 import numpy as np
+import pandas as pd
+import loompy
+from werkzeug import secure_filename
 from multiprocessing import Process
 import northstar
 
@@ -16,14 +19,37 @@ class NorthstarRun():
             if os.path.isfile(logfile):
                 jobid = None
         self.logfile = 'data/logs/log_{:}.txt'.format(jobid)
-        self.outfile = 'data/results/log_{:}.txt'.format(jobid)
+        self.outfile = 'data/results/results_{:}.txt'.format(jobid)
         self.jobid = jobid
 
-    def fit(self, new_data):
+    def save_input_matrix(self, field):
+        fn = secure_filename(field.filename)
+        fn_ext = fn.split('.')[-1]
+        if fn_ext == 'tsv':
+            fn = 'data/input/input_{:}.tsv'.format(self.jobid)
+            field.save(fn)
+            self.newdata = pd.read_csv(fn, sep='\t', index_col=0)
+        elif fn_ext == 'loom':
+            fn = 'data/input/input_{:}.loom'.format(self.jobid)
+            field.save(fn)
+            with loompy.connect(fn) as dsl:
+                # FIXME: let the user specify as expandable form fields
+                genes = dsl.ra[dsl.ra.keys()[0]]
+                cells = dsl.ca[dsl.ca.keys()[0]]
+                self.newdata = pd.DataFrame(
+                    data=dsl[:, :],
+                    index=genes,
+                    columns=cells,
+                    )
+        else:
+            raise ValueError('File format not supported: {:}'.format(fn_ext))
+        os.remove(fn)
+
+    def fit(self):
         global p
         p = Process(
             target=self.computeNorthstar,
-            args=(self.logfile, self.outfile, self.method, new_data),
+            args=(self.logfile, self.outfile, self.method, self.newdata),
             kwargs=self.kwargs,
             )
         p.start()
