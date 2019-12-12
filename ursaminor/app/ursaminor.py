@@ -1,53 +1,50 @@
+import os
+import time
+from multiprocessing import Process
+import numpy as np
 import pandas as pd
-import northstar
 
-import requests
 from flask import Flask, escape, request, render_template
 from werkzeug import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SelectField, SubmitField, validators, ValidationError
 
+from atlas_landmarks import get_atlases
+from compute_queue import computeNorthstar
+
 
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = 'the-one-up-in-the-sky'
 
+# Remove all temp files
+def remove_files():
+    for fdn in ['logs', 'results']:
+        for fn in os.listdir('data/{:}'.format(fdn)):
+            os.remove('data/{:}/{:}'.format(fdn, fn))
+remove_files()
 
-#FIXME: this can be outsourced to an external queue manager
+
 class NorthstarRun():
-    def __init__(self, method, **kwargs):
+    def __init__(self, method='average', **kwargs):
+        self.method = method
         self.kwargs = kwargs
-        if method == 'average':
-            self.model = northstar.Averages(
-                **self.kwargs,
-                )
-        else:
-            self.model = northstar.Subsample(
-                **self.kwargs,
-                )
+
+    def compute_files(self, jobid=None):
+        if jobid is None:
+            jobid = np.random.randint(10000000)
+        self.logfile = 'data/logs/log_{:}.txt'.format(jobid)
+        self.outfile = 'data/results/log_{:}.txt'.format(jobid)
+        self.jobid = jobid
 
     def fit(self, new_data):
-        self.model.fit(new_data)
-        self.membership = self.model.membership
-
-
-def get_atlases():
-    url = 'https://raw.githubusercontent.com/northstaratlas/atlas_landmarks/master/table.tsv'
-    response = requests.get(url)
-    if response.status_code != 200:
-        raise ValueError('Cannot load atlas landmarks TSV table')
-
-    atlases = []
-    text = response.text
-    for il, line in enumerate(text.split('\n')):
-        if il == 0:
-            continue
-        atlas_name = line.split('\t')[0]
-        if atlas_name:
-            atlases.append(atlas_name)
-
-    return atlases
+        global p
+        p = Process(
+            target=computeNorthstar,
+            args=(self.logfile, self.outfile, self.method, new_data),
+            kwargs=self.kwargs,
+            )
+        p.start()
 
 
 class NorthstarForm(FlaskForm):
@@ -72,28 +69,27 @@ def index():
     form.get_atlas_choices()
 
     if form.validate_on_submit():
-        # Save tsv file to file
-        f = request.files['fileupload']
-        fn = 'data/new_data.tsv'
-        f.save(fn)
 
-        # Prepare northstar
+        # Read in data via file
+        f = request.files['fileupload']
+        fn = 'data/input/new_data.tsv'
+        f.save(fn)
+        try:
+            newdata = pd.read_csv(fn, sep='\t', index_col=0)
+        finally:
+            os.remove(fn)
+
         model_wrap = NorthstarRun(
             method='average',
             atlas=form.atlas.data,
-            #FIXME
             n_features_overdispersed=20,
             )
-
-        # Read new data from file
-        newdata = pd.read_csv(fn, sep='\t', index_col=0)
-
-        # Classify
+        model_wrap.compute_files()
         model_wrap.fit(newdata)
 
-        # Format output
-        res = model_wrap.membership
-        res_string = '</br>'.join(['Cell types:'] + list(res))
+        # Format jobID for queries
+        res = model_wrap.jobid
+        res_string = 'JOB ID: {0}</br>PROGRESS ENDPOINT: /progress/{0}'.format(res)
 
         return res_string
 
@@ -106,3 +102,24 @@ def index():
                 return ', '.join(errors)
         else:
             return render_template('index.html', form=form)
+
+
+@app.route('/progress/<path>')
+def progress(path):
+    model_wrap = NorthstarRun()
+    model_wrap.compute_files(path)
+    if os.path.isfile(model_wrap.logfile):
+        with open(model_wrap.logfile, 'rt') as f:
+            log = f.read()
+        if 'Done' in log:
+            with open(model_wrap.outfile, 'rt') as f:
+                response = '</br>'.join(f.read().split('\n'))
+
+            os.remove(model_wrap.logfile)
+            os.remove(model_wrap.outfile)
+
+            return response
+
+    else:
+        response = 'In progress'
+        return response
