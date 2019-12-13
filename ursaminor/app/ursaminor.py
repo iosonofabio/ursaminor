@@ -76,5 +76,5 @@ def progress(path):
             print(response)
             return response
     else:
-        response = 'In progress'
+        response = ''
         return response

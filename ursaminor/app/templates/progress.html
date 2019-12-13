@@ -4,19 +4,24 @@
 
 <body>
 
-<p>
-northstar is running:
-</p>
+<div class="star">
+  <img src="/static/images/ursa.png">
+</div>
 
-<p>
-JOB ID: {{ jobid }}
-</p>
-
-<p>
-ENDPOINT: {{ endpoint }}
-</p>
-
-<div id="result">
+<div class="content-form">
+  <div id="result">
+    <p>
+    northstar is running:
+    </p>
+    
+    <p>
+    JOB ID: {{ jobid }}
+    </p>
+    
+    <p>
+    ENDPOINT: {{ endpoint }}
+    </p> 
+  </div>
 </div>
 
 
@@ -26,9 +31,9 @@ let intervalId = window.setInterval(function() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     var response = xhttp.responseText;
-    if (response != "In progress") {
-      document.getElementById("result").innerHTML = "Result:<br>" + response;
-      //clearInterval(intervalId);
+    if (response != "") {
+      document.getElementById("result").innerHTML = "<div class=\"result\">Result:</div><div>" + response + "</div>";
+      clearInterval(intervalId);
     }
     return;
   };

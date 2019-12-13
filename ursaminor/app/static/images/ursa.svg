@@ -1,12 +1,5 @@
-<head>
- <link rel="stylesheet" href="../static/index.css">
-</head>
-
-<body>
-
-<div class="star">
-<!--<img src="/static/images/ursa.png">
--->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -22,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
-   sodipodi:docname="ursa_invisible.svg"
+   sodipodi:docname="ursa.svg"
    inkscape:export-filename="/home/fabio/university/PI/projects/ursaminor/ursaminor/app/static/images/ursa.png"
    inkscape:export-xdpi="96.469048"
    inkscape:export-ydpi="96.469048">
@@ -70,13 +63,14 @@
      id="layer1"
      transform="translate(-45.585019,-14.213855)">
     <g
-       id="g944">
+       id="ursa"
+       inkscape:label="ursa">
       <path
          inkscape:label="constellation"
          inkscape:connector-curvature="0"
          id="constellation"
          d="m 112.72894,21.473458 -12.73791,5.984255 -11.651503,4.020169 -12.084282,-0.07289 -5.652833,13.458805 -22.296579,-8.395386 9.407262,-12.860562 18.54215,7.797143"
-         style="opacity:0;fill:none;stroke:#fbfbfb;stroke-width:0.32158014;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;stroke:#fbfbfb;stroke-width:0.32158014;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:nodetypes="cccccccc" />
       <path
          inkscape:label="star1"
@@ -95,7 +89,7 @@
          sodipodi:cx="83.395844"
          sodipodi:sides="5"
          id="star1"
-         style="opacity:0;fill:#ffd754;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.07895379;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ffd754;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.07895379;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
       <path
          inkscape:label="star2"
@@ -114,7 +108,7 @@
          sodipodi:cx="82.325165"
          sodipodi:sides="5"
          id="star2"
-         style="opacity:0;fill:#ff7f2a;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ff7f2a;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
       <path
          inkscape:label="star3"
@@ -133,7 +127,7 @@
          sodipodi:cx="81.695862"
          sodipodi:sides="5"
          id="star3"
-         style="opacity:0;fill:#ff5555;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ff5555;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
       <path
          inkscape:label="star4"
@@ -152,7 +146,7 @@
          sodipodi:cx="82.064766"
          sodipodi:sides="5"
          id="star4"
-         style="opacity:0;fill:#aa87de;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#aa87de;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
       <path
          inkscape:label="star5"
@@ -171,7 +165,7 @@
          sodipodi:cx="78.988197"
          sodipodi:sides="5"
          id="star5"
-         style="opacity:0;fill:#aaeeff;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#aaeeff;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
       <path
          inkscape:label="star7"
@@ -190,7 +184,7 @@
          sodipodi:cx="81.658104"
          sodipodi:sides="5"
          id="star7"
-         style="opacity:0;fill:#ff5599;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ff5599;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
       <path
          inkscape:label="star6"
@@ -209,95 +203,8 @@
          sodipodi:cx="84.481453"
          sodipodi:sides="5"
          id="star6"
-         style="opacity:0;fill:#99ff55;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#99ff55;fill-opacity:1;stroke:#fcfcfc;stroke-width:0.02644214;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
     </g>
   </g>
 </svg>
-
-
-
-</div>
-
-<div class="content-form">
-<form action="" method="POST" novalidate enctype="multipart/form-data">
-  {{ form.hidden_tag() }}
-  <div class="cell">
-    {{ form.atlas.label }}: {{ form.atlas }}
-  </div>
-  <div class="cell">
-    {{ form.method.label }}: {{ form.method }}
-  </div>
-  <div class="cell">
-    Number of markers per atlas cell type: {{ form.nfeact }}
-  </div>
-  <div class="cell">
-    Number of overdispersed features: {{ form.nfeaod }}
-  </div>
-  <div class="cell">
-    Number of principal components: {{ form.npcs }}
-  </div>
-  <div class="cell">
-    Number of graph neighbors: {{ form.nnei }}
-  </div>
-  <div class="cell">
-    Number of graph neighbors out of atlas nodes: {{ form.nneia }}
-  </div>
-  <div class="cell">
-    Resolution parameter: {{ form.respar }}
-  </div>
-  <div class="cell">
-      <p>Count table to annotate (each row is a gene, TSV or loom format):</p>
-      <div><span>{{ form.fileupload }}</span><span><a href="/static/data/small_spyros.tsv">Example data (small)</a></span></div>
-      
-  </div>
-  <div class="cell submit">
-    {{ form.submit() }}
-  </div>
-</form>
-</div>
-
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script>
-d3.select('path#star1')
-  .transition()
-  .duration(1000)
-  .style("opacity", 1.0);
-d3.select('path#star2')
-  .transition()
-  .delay(1000)
-  .duration(1000)
-  .style("opacity", 1.0);
-d3.select('path#star3')
-  .transition()
-  .delay(2400)
-  .duration(1000)
-  .style("opacity", 1.0);
-d3.select('path#star4')
-  .transition()
-  .delay(3200)
-  .duration(1300)
-  .style("opacity", 1.0);
-d3.select('path#star5')
-  .transition()
-  .delay(4400)
-  .duration(1000)
-  .style("opacity", 1.0);
-d3.select('path#star6')
-  .transition()
-  .delay(4800)
-  .duration(1000)
-  .style("opacity", 1.0);
-d3.select('path#star7')
-  .transition()
-  .delay(5300)
-  .duration(1000)
-  .style("opacity", 1.0);
-d3.select('path#constellation')
-  .transition()
-  .delay(6000)
-  .duration(3000)
-  .style("opacity", 1.0);
-</script>
-
-</body>

@@ -1,0 +1,21 @@
+html {
+  font-family: 'Open Sans', 'helvetica', sans-serif;
+  background: #040440;
+  font-size: 16px;
+  text-align: center;
+  color: #CCCCCC;
+
+}
+
+.star {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.content-form {
+  padding-top: 30px;
+}
+
+.cell {
+  padding: 10px;
+}
