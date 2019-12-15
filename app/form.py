@@ -27,7 +27,7 @@ class NorthstarForm(FlaskForm):
         fn = secure_filename(field.data.filename)
         fn_ext = fn.split('.')[-1]
 
-        formats_supported = ('tsv', 'loom')
+        formats_supported = ('tsv', 'csv', 'loom')
         if fn_ext not in formats_supported:
             raise ValidationError(
                 'Uploaded file format not supported. Supported formats: {:}'.format(', '.join(formats_supported)))

@@ -19,7 +19,7 @@ class NorthstarRun():
             if os.path.isfile(logfile):
                 jobid = None
         self.logfile = 'data/logs/log_{:}.txt'.format(jobid)
-        self.outfile = 'data/results/results_{:}.txt'.format(jobid)
+        self.outfile = 'data/results/results_{:}.tsv'.format(jobid)
         self.jobid = jobid
 
     def save_input_matrix(self, field):
@@ -28,7 +28,11 @@ class NorthstarRun():
         if fn_ext == 'tsv':
             fn = 'data/input/input_{:}.tsv'.format(self.jobid)
             field.save(fn)
-            self.newdata = pd.read_csv(fn, sep='\t', index_col=0)
+            self.newdata = pd.read_csv(fn, sep='\t', index_col=0).astype(np.float32)
+        elif fn_ext == 'csv':
+            fn = 'data/input/input_{:}.csv'.format(self.jobid)
+            field.save(fn)
+            self.newdata = pd.read_csv(fn, sep=',', index_col=0).astype(np.float32)   
         elif fn_ext == 'loom':
             fn = 'data/input/input_{:}.loom'.format(self.jobid)
             field.save(fn)
@@ -69,7 +73,9 @@ class NorthstarRun():
         membership = model.membership
 
         with open(outfile, 'w') as f:
-            f.write('\n'.join(membership))
+            f.write('CellID\tCell type\n')
+            for i in range(len(membership)):
+                f.write('{:}\t{:}\n'.format(new_data.columns[i], membership[i]))
 
         with open(logfile, 'w') as f:
             f.write('Done')
