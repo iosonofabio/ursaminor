@@ -14,8 +14,9 @@ def remove_files(age='1d'):
     md = {'d': 86400, 'h': 3600, 'm': 60, 's': 1}
     for fdn in ['logs', 'results']:
         for fn in os.listdir('data/{:}'.format(fdn)):
-            if (age == 'all') or (os.stat(fn).st_mtime < now - int(age[:-1]) * md[age[-1]]):
-                os.remove('data/{:}/{:}'.format(fdn, fn))
+            fna = 'data/{:}/{:}'.format(fdn, fn)
+            if (age == 'all') or (os.stat(fna).st_mtime < now - int(age[:-1]) * md[age[-1]]):
+                os.remove(fna)
 
 
 remove_files(age='all')
@@ -77,7 +78,7 @@ def progress(path):
             response = '<div class="linkToDownload"><a href="/results/{:}">Download</a></div>'.format(
                 os.path.basename(model_wrap.outfile))
 
-            response += '<div class="embedding"><img src="/results/{:}" /></div>'.format(
+            response += '<div class="embeddingWrap"><div class="embeddingInner"><img src="/results/{:}" /></div></div>'.format(
                 os.path.basename(model_wrap.embedimgfile))
 
             with open(model_wrap.outfile, 'rt') as f:
