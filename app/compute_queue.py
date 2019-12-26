@@ -56,7 +56,7 @@ class NorthstarRun():
         global p
         p = Process(
             target=self.computeNorthstar,
-            args=(self.logfile, self.outfile, self.method, self.newdata),
+            args=(self.logfile, self.outfile, self.embedimgfile, self.method, self.newdata),
             kwargs=self.kwargs,
             )
         p.start()
