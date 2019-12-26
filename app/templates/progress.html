@@ -31,7 +31,19 @@ let intervalId = window.setInterval(function() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     var response = xhttp.responseText;
-    if (response != "") {
+    if (response == "start") {
+      document.getElementById("result").innerHTML = "<div class=\"result\">Starting...</div>";
+    }
+    else if (response == "cell types") {
+      document.getElementById("result").innerHTML = "<div class=\"result\">Model ready, computing cell types...</div>";
+    } else if (response == "embed") {
+      document.getElementById("result").innerHTML = "<div class=\"result\">Cell types ready, computing embedding...</div>";
+    } else if (response == "plot") {
+      document.getElementById("result").innerHTML = "<div class=\"result\">Embedding ready, plotting...</div>";
+
+    } else if (response == "output") {
+      document.getElementById("result").innerHTML = "<div class=\"result\">Plot ready, writing output file...</div>";
+    } else if (response != "") {
       document.getElementById("result").innerHTML = "<div class=\"result\">Result:</div><div>" + response + "</div>";
       clearInterval(intervalId);
     }
