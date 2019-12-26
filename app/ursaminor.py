@@ -11,12 +11,14 @@ root_fdn = '/home/ubuntu/ursaminor/'
 
 # Remove all temp files
 def remove_files(age='1d'):
-    now = time.time()
     md = {'d': 86400, 'h': 3600, 'm': 60, 's': 1}
+    now = time.time()
+    old = now - int(age[:-1]) * md[age[-1]]
     for fdn in ['logs', 'results']:
         for fn in os.listdir(root_fdn+'data/{:}'.format(fdn)):
-            if (age == 'all') or (os.stat(fn).st_mtime < now - int(age[:-1]) * md[age[-1]]):
-                os.remove(root_fdn+'data/{:}/{:}'.format(fdn, fn))
+            fna = root_fdn+'data/{:}/{:}'.format(fdn, fn)
+            if (age == 'all') or (os.stat(fna).st_mtime < old):
+                os.remove(fna)
 
 
 remove_files(age='all')
