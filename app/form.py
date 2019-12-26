@@ -10,13 +10,13 @@ class NorthstarForm(FlaskForm):
     fileupload = FileField('New data (TSV)')
     submit = SubmitField('northstar!')
     atlas = SelectField('Atlas')
-    method = RadioField('Method', choices=[('average', 'average'), ('subsample', 'subsample (20)')], default='average')
+    method = RadioField('Method', choices=[('average', 'average'), ('subsample', 'subsample (20)')], default='subsample')
     nfeact = IntegerField('nfeact', default=30)
-    nfeaod = IntegerField('nfeaod', default=20)
+    nfeaod = IntegerField('nfeaod', default=400)
     npcs = IntegerField('npcs', default=25)
-    nnei = IntegerField('nnei', default=15)
-    nneia = IntegerField('nneia', default=5)
-    respar = FloatField('respar', default=0.001)
+    nnei = IntegerField('nnei', default=25)
+    nneia = IntegerField('nneia', default=4)
+    respar = FloatField('respar', default=0.005)
 
     def get_atlas_choices(self):
         self.atlas.choices = [(x, x) for x in get_atlases()]

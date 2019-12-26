@@ -1,23 +1,26 @@
 import os
 import time
-import pandas as pd
 
 from flask import Flask, escape, request, render_template, send_from_directory
 
-from compute_queue import NorthstarRun
 from form import NorthstarForm
+from compute_queue import NorthstarRun
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the-one-up-in-the-sky'
 
 # Remove all temp files
+root_fdn = '/home/ubuntu/ursaminor/'
 def remove_files():
     for fdn in ['logs', 'results']:
-        for fn in os.listdir('data/{:}'.format(fdn)):
-            os.remove('data/{:}/{:}'.format(fdn, fn))
+        for fn in os.listdir(root_fdn+'data/{:}'.format(fdn)):
+            os.remove(root_fdn+'data/{:}/{:}'.format(fdn, fn))
 remove_files()
 
+#@app.route('/', methods=['GET', 'POST'])
+#def index():
+#    return 'ciao 2'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -96,3 +99,4 @@ def result(path):
         mimetype='text/tab-separated-values',
         attachment_filename='northstar_result.tsv',
         )
+

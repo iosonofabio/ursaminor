@@ -6,6 +6,8 @@ from werkzeug import secure_filename
 from multiprocessing import Process
 import northstar
 
+root_fdn = '/home/ubuntu/ursaminor/'
+
 
 class NorthstarRun():
     def __init__(self, method='average', **kwargs):
@@ -15,26 +17,26 @@ class NorthstarRun():
     def compute_files(self, jobid=None):
         while jobid is None:
             jobid = np.random.randint(10000000)
-            logfile = 'data/logs/log_{:}.txt'.format(jobid)
+            logfile = root_fdn+'data/logs/log_{:}.txt'.format(jobid)
             if os.path.isfile(logfile):
                 jobid = None
-        self.logfile = 'data/logs/log_{:}.txt'.format(jobid)
-        self.outfile = 'data/results/results_{:}.tsv'.format(jobid)
+        self.logfile = root_fdn+'data/logs/log_{:}.txt'.format(jobid)
+        self.outfile = root_fdn+'data/results/results_{:}.tsv'.format(jobid)
         self.jobid = jobid
 
     def save_input_matrix(self, field):
         fn = secure_filename(field.filename)
         fn_ext = fn.split('.')[-1]
         if fn_ext == 'tsv':
-            fn = 'data/input/input_{:}.tsv'.format(self.jobid)
+            fn = root_fdn+'data/input/input_{:}.tsv'.format(self.jobid)
             field.save(fn)
             self.newdata = pd.read_csv(fn, sep='\t', index_col=0).astype(np.float32)
         elif fn_ext == 'csv':
-            fn = 'data/input/input_{:}.csv'.format(self.jobid)
+            fn = root_fdn+'data/input/input_{:}.csv'.format(self.jobid)
             field.save(fn)
             self.newdata = pd.read_csv(fn, sep=',', index_col=0).astype(np.float32)   
         elif fn_ext == 'loom':
-            fn = 'data/input/input_{:}.loom'.format(self.jobid)
+            fn = root_fdn+'data/input/input_{:}.loom'.format(self.jobid)
             field.save(fn)
             with loompy.connect(fn) as dsl:
                 # FIXME: let the user specify as expandable form fields
@@ -65,6 +67,11 @@ class NorthstarRun():
                 **kwargs,
                 )
         else:
+            # FIXME: do better than this!
+            if 'n_neighbors_out_of_atlas' in kwargs:
+                del kwargs['n_neighbors_out_of_atlas']
+            if 'n_cells_per_type' in kwargs:
+                del kwargs['n_cells_per_type']
             model = northstar.Subsample(
                 **kwargs,
                 )

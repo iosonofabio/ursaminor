@@ -1,4 +1,3 @@
-import pandas as pd
 import requests
 
 
@@ -8,10 +7,12 @@ def get_atlases():
     try:
         response = requests.get(url)
     except requests.exceptions.ConnectionError:
-        return pd.read_csv(
-            '/home/fabio/university/postdoc/atlas_landmarks/table.tsv',
-            sep='\t',
-            index_col=0).index
+        fn = '/home/fabio/university/postdoc/atlas_landmarks/table.tsv'
+        idx = []
+        with open(fn, 'rt') as f:
+            for line in f:
+                idx.append(line.strip('\n').split('\t')[0])
+        return idx
 
     if response.status_code != 200:
         raise ValueError('Cannot load atlas landmarks TSV table')
