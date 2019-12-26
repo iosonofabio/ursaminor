@@ -139,6 +139,11 @@ class NorthstarRun():
                 perplexity=30,
                 )
             vs = vs.loc[model.cell_names_newdata]
+        elif embedding in ('pca', 'umap'):
+            vs = model.embed(
+                method=embedding,
+                )
+            vs = vs.loc[model.cell_names_newdata]
         else:
             raise ValueError('Embedding {:} not supported'.format(embedding))
 
