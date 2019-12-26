@@ -1,21 +1,25 @@
 import os
 import time
-import pandas as pd
 
 from flask import Flask, escape, request, render_template, send_from_directory
 
 from compute_queue import NorthstarRun
 from form import NorthstarForm
 
+root_fdn = './'
 
 # Remove all temp files
 def remove_files(age='1d'):
-    now = time.time()
     md = {'d': 86400, 'h': 3600, 'm': 60, 's': 1}
+    now = time.time()
+    if age == 'all':
+        old = None
+    else:
+        old = now - int(age[:-1]) * md[age[-1]]
     for fdn in ['logs', 'results']:
-        for fn in os.listdir('data/{:}'.format(fdn)):
-            fna = 'data/{:}/{:}'.format(fdn, fn)
-            if (age == 'all') or (os.stat(fna).st_mtime < now - int(age[:-1]) * md[age[-1]]):
+        for fn in os.listdir(root_fdn+'data/{:}'.format(fdn)):
+            fna = root_fdn+'data/{:}/{:}'.format(fdn, fn)
+            if (age == 'all') or (os.stat(fna).st_mtime < old):
                 os.remove(fna)
 
 
