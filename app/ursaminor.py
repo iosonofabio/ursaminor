@@ -50,6 +50,7 @@ def index():
             threshold_neighborhood=0.8,
             clustering_metric='cpm',
             resolution_parameter=form.respar.data,
+            embedding='pca',
             )
         model_wrap.compute_files()
         model_wrap.save_input_matrix(request.files['fileupload'])

@@ -258,7 +258,7 @@
         "northstar": {
             "editable": true,
             "git": "https://github.com/northstaratlas/northstar.git",
-            "ref": "409a869f32b95b857c62aebb442dcecee5b32447"
+            "ref": "9eb74e19ee0291948e502a7f4e1858b9a6aa6d19"
         },
         "numba": {
             "hashes": [
