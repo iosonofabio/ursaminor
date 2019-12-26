@@ -37,12 +37,12 @@ let intervalId = window.setInterval(function() {
     else if (response == "cell types") {
       document.getElementById("result").innerHTML = "<div class=\"result\">Model ready, computing cell types...</div>";
     } else if (response == "embed") {
-      document.getElementById("result").innerHTML = "<div class=\"result\">Cell types ready, computing embedding...</div>";
+        document.getElementById("result").innerHTML = "<div class=\"result\"><div>Cell types ready, computing embedding...</div><div class=\"linkToDownload\"><a href=\"/results/results_{{ jobid }}.tsv\">Download</a></div></div>";
     } else if (response == "plot") {
-      document.getElementById("result").innerHTML = "<div class=\"result\">Embedding ready, plotting...</div>";
+        document.getElementById("result").innerHTML = "<div class=\"result\"><div>Embedding ready, plotting...</div><div class=\"linkToDownload\"><a href=\"/results/results_{{ jobid }}.tsv\">Download</a></div></div>";
 
     } else if (response == "output") {
-      document.getElementById("result").innerHTML = "<div class=\"result\">Plot ready, writing output file...</div>";
+        document.getElementById("result").innerHTML = "<div class=\"result\"><div>Plot ready, writing output file...</div><div class=\"linkToDownload\"><a href=\"/results/results_{{ jobid }}.tsv\">Download</a></div></div>";
     } else if (response != "") {
       document.getElementById("result").innerHTML = "<div class=\"result\">Result:</div><div>" + response + "</div>";
       clearInterval(intervalId);

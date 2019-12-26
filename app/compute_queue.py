@@ -135,6 +135,13 @@ class NorthstarRun():
             f.write(' Cell types computed.\n')
             f.write('Calculating embedding...')
 
+        with open(outfile, 'w') as f:
+            f.write('CellID\tCell type\n')
+            for i in range(len(membership)):
+                f.write('{:}\t{:}\n'.format(
+                    new_data.columns[i], membership[i],
+                    ))
+
         # Compute embedding with atlas and newdata, but only show newdata
         if embedding == 'tsne':
             vs = model.embed(
@@ -168,5 +175,5 @@ class NorthstarRun():
                     new_data.columns[i], membership[i],
                     vs.values[i, 0], vs.values[i, 1]))
 
-        with open(logfile, 'w') as f:
+        with open(logfile, 'a') as f:
             f.write('Done')
