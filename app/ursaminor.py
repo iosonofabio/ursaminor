@@ -8,19 +8,25 @@ from compute_queue import NorthstarRun
 from form import NorthstarForm
 
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'the-one-up-in-the-sky'
-
 # Remove all temp files
-def remove_files():
+def remove_files(age='1d'):
+    now = time.time()
+    md = {'d': 86400, 'h': 3600, 'm': 60, 's': 1}
     for fdn in ['logs', 'results']:
         for fn in os.listdir('data/{:}'.format(fdn)):
-            os.remove('data/{:}/{:}'.format(fdn, fn))
-remove_files()
+            if (age == 'all') or (os.stat(fn).st_mtime < now - int(age[:-1]) * md[age[-1]]):
+                os.remove('data/{:}/{:}'.format(fdn, fn))
+
+
+remove_files(age='all')
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'the-one-up-in-the-sky'
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    remove_files(age='1d')
+
     form = NorthstarForm()
     form.get_atlas_choices()
 
@@ -71,10 +77,13 @@ def progress(path):
             response = '<div class="linkToDownload"><a href="/results/{:}">Download</a></div>'.format(
                 os.path.basename(model_wrap.outfile))
 
+            response += '<div class="embedding"><img src="/results/{:}" /></div>'.format(
+                os.path.basename(model_wrap.embedimgfile))
+
             with open(model_wrap.outfile, 'rt') as f:
                 response += '<div class="resultsList">'
                 for line in f:
-                    cellID, cellType = line.rstrip('\n').split('\t')
+                    cellID, cellType, dim1, dim2 = line.rstrip('\n').split('\t')
                     response += '{:} {:}<br>'.format(cellID, cellType)
                 response += '</div>'
 
@@ -89,10 +98,22 @@ def progress(path):
 
 @app.route('/results/<path>')
 def result(path):
-    return send_from_directory(
-        '../data/results',
-        path,
-        as_attachment=True,
-        mimetype='text/tab-separated-values',
-        attachment_filename='northstar_result.tsv',
-        )
+    ext = path.split('.')[-1]
+    if ext == 'tsv':
+        return send_from_directory(
+            '../data/results',
+            path,
+            as_attachment=True,
+            mimetype='text/tab-separated-values',
+            attachment_filename='northstar_result.tsv',
+            )
+    elif ext == 'png':
+        return send_from_directory(
+            '../data/results',
+            path,
+            as_attachment=True,
+            mimetype='image/png',
+            attachment_filename='embedding.png',
+            )
+    else:
+        raise ValueError('Extension not accepted')

@@ -16,8 +16,10 @@ leidenalg = {editable = true,git = "https://github.com/vtraag/leidenalg.git",ref
 jinja2 = "*"
 requests = "*"
 flask-wtf = "*"
-northstar = "*"
 loompy = "*"
+matplotlib = "*"
+seaborn = "*"
+northstar = {editable = true,git = "https://github.com/northstaratlas/northstar.git"}
 
 [requires]
 python_version = "3.8"
