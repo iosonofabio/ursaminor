@@ -26,6 +26,7 @@ class NorthstarRun():
                 jobid = None
         self.logfile = root_fdn+'data/logs/log_{:}.txt'.format(jobid)
         self.outfile = root_fdn+'data/results/results_{:}.tsv'.format(jobid)
+        self.outfile_noembed = root_fdn+'data/results/results_noembed_{:}.tsv'.format(jobid)
         self.embedimgfile = root_fdn+'data/results/results_{:}_embedding.png'.format(jobid)
         self.jobid = jobid
 
@@ -60,7 +61,9 @@ class NorthstarRun():
         global p
         p = Process(
             target=self.computeNorthstar,
-            args=(self.logfile, self.outfile, self.embedimgfile, self.method, self.newdata),
+            args=(
+                self.logfile, self.outfile, self.outfile_noembed,
+                self.embedimgfile, self.method, self.newdata),
             kwargs=self.kwargs,
             )
         p.start()
@@ -69,6 +72,7 @@ class NorthstarRun():
     def computeNorthstar(
             logfile,
             outfile,
+            outfile_noembed,
             imgfile,
             method,
             new_data,
@@ -135,7 +139,7 @@ class NorthstarRun():
             f.write(' Cell types computed.\n')
             f.write('Calculating embedding...')
 
-        with open(outfile, 'w') as f:
+        with open(outfile_noembed, 'w') as f:
             f.write('CellID\tCell type\n')
             for i in range(len(membership)):
                 f.write('{:}\t{:}\n'.format(
