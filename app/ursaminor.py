@@ -13,7 +13,10 @@ root_fdn = '/home/ubuntu/ursaminor/'
 def remove_files(age='1d'):
     md = {'d': 86400, 'h': 3600, 'm': 60, 's': 1}
     now = time.time()
-    old = now - int(age[:-1]) * md[age[-1]]
+    if age == 'all':
+        old = None
+    else:
+        old = now - int(age[:-1]) * md[age[-1]]
     for fdn in ['logs', 'results']:
         for fn in os.listdir(root_fdn+'data/{:}'.format(fdn)):
             fna = root_fdn+'data/{:}/{:}'.format(fdn, fn)
