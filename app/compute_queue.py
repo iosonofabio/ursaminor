@@ -6,6 +6,10 @@ from werkzeug import secure_filename
 from multiprocessing import Process
 import northstar
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
 root_fdn = '/home/ubuntu/ursaminor/'
 
 
