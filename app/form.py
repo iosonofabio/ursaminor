@@ -11,6 +11,7 @@ class NorthstarForm(FlaskForm):
     submit = SubmitField('northstar!')
     atlas = SelectField('Atlas')
     method = RadioField('Method', choices=[('average', 'average'), ('subsample', 'subsample (20)')], default='average')
+    embedding = RadioField('Embedding', choices=[('tsne', 't-SNE'), ('umap', 'UMAP'), ('pca', 'PCA')], default='tsne')
     nfeact = IntegerField('nfeact', default=30)
     nfeaod = IntegerField('nfeaod', default=20)
     npcs = IntegerField('npcs', default=25)
