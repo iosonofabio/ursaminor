@@ -10,7 +10,8 @@ class NorthstarForm(FlaskForm):
     fileupload = FileField('New data (TSV)')
     submit = SubmitField('northstar!')
     atlas = SelectField('Atlas')
-    method = RadioField('Method', choices=[('average', 'average'), ('subsample', 'subsample (20)')], default='subsample')
+    method = RadioField('Method', choices=[('average', 'average'), ('subsample', 'subsample (20)')], default='average')
+    embedding = RadioField('Embedding', choices=[('tsne', 't-SNE'), ('umap', 'UMAP'), ('pca', 'PCA')], default='tsne')
     nfeact = IntegerField('nfeact', default=30)
     nfeaod = IntegerField('nfeaod', default=400)
     npcs = IntegerField('npcs', default=25)
@@ -19,7 +20,12 @@ class NorthstarForm(FlaskForm):
     respar = FloatField('respar', default=0.005)
 
     def get_atlas_choices(self):
-        self.atlas.choices = [(x, x) for x in get_atlases()]
+        atlas_dict = get_atlases()
+        self.atlas.choices = []
+        for ad in atlas_dict:
+            key = ad['name']
+            val = '{:} ({:}, {:})'.format(ad['name'], ad['species'], ad['tissue'])
+            self.atlas.choices.append((key, val))
 
     def validate_fileupload(form, field):
         if field.data is None:

@@ -18,12 +18,20 @@ def get_atlases():
         raise ValueError('Cannot load atlas landmarks TSV table')
 
     atlases = []
-    text = response.text
-    for il, line in enumerate(text.split('\n')):
-        if il == 0:
-            continue
-        atlas_name = line.split('\t')[0]
+    lines = response.text.split('\n')
+    fields = lines[0].split('\t')
+    icol_species = fields.index('Species')
+    icol_tissue = fields.index('Tissue')
+    for line in lines[1:]:
+        fields = line.split('\t')
+        atlas_name = fields[0]
         if atlas_name:
-            atlases.append(atlas_name)
+            species = fields[icol_species]
+            tissue = fields[icol_tissue]
+            atlases.append({
+                'name': atlas_name,
+                'species': species,
+                'tissue': tissue,
+                })
 
     return atlases
