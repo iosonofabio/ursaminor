@@ -83,7 +83,7 @@ def progress(path):
             response = '<div class="linkToDownload"><a href="/results/{:}">Download</a></div>'.format(
                 os.path.basename(model_wrap.outfile))
 
-            response += '<div class="embedding"><img src="/results/{:}" /></div>'.format(
+            response += '<div class="embeddingWrap"><div class="embeddingInner"><img src="/results/{:}" /></div></div>'.format(
                 os.path.basename(model_wrap.embedimgfile))
 
             with open(model_wrap.outfile, 'rt') as f:
