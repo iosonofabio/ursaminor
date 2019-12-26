@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
+root_fdn = './'
+
+
 class NorthstarRun():
     def __init__(self, method='average', **kwargs):
         self.method = method
@@ -18,28 +21,28 @@ class NorthstarRun():
     def compute_files(self, jobid=None):
         while jobid is None:
             jobid = np.random.randint(10000000)
-            logfile = 'data/logs/log_{:}.txt'.format(jobid)
+            logfile = root_fdn+'data/logs/log_{:}.txt'.format(jobid)
             if os.path.isfile(logfile):
                 jobid = None
-        self.logfile = 'data/logs/log_{:}.txt'.format(jobid)
-        self.outfile = 'data/results/results_{:}.tsv'.format(jobid)
-        self.outfile_noembed = 'data/results/results_noembed_{:}.tsv'.format(jobid)
-        self.embedimgfile = 'data/results/results_{:}_embedding.png'.format(jobid)
+        self.logfile = root_fdn+'data/logs/log_{:}.txt'.format(jobid)
+        self.outfile = root_fdn+'data/results/results_{:}.tsv'.format(jobid)
+        self.outfile_noembed = root_fdn+'data/results/results_noembed_{:}.tsv'.format(jobid)
+        self.embedimgfile = root_fdn+'data/results/results_{:}_embedding.png'.format(jobid)
         self.jobid = jobid
 
     def save_input_matrix(self, field):
         fn = secure_filename(field.filename)
         fn_ext = fn.split('.')[-1]
         if fn_ext == 'tsv':
-            fn = 'data/input/input_{:}.tsv'.format(self.jobid)
+            fn = root_fdn+'data/input/input_{:}.tsv'.format(self.jobid)
             field.save(fn)
             self.newdata = pd.read_csv(fn, sep='\t', index_col=0).astype(np.float32)
         elif fn_ext == 'csv':
-            fn = 'data/input/input_{:}.csv'.format(self.jobid)
+            fn = root_fdn+'data/input/input_{:}.csv'.format(self.jobid)
             field.save(fn)
             self.newdata = pd.read_csv(fn, sep=',', index_col=0).astype(np.float32)
         elif fn_ext == 'loom':
-            fn = 'data/input/input_{:}.loom'.format(self.jobid)
+            fn = root_fdn+'data/input/input_{:}.loom'.format(self.jobid)
             field.save(fn)
             with loompy.connect(fn) as dsl:
                 # FIXME: let the user specify as expandable form fields
