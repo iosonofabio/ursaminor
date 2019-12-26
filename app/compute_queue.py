@@ -124,8 +124,16 @@ class NorthstarRun():
                 **kwargs,
                 )
 
+        with open(logfile, 'w') as f:
+            f.write('Northstar model ready.\n')
+            f.write('Computing cell types...')
+
         model.fit(new_data)
         membership = model.membership
+
+        with open(logfile, 'a') as f:
+            f.write(' Cell types computed.\n')
+            f.write('Calculating embedding...')
 
         # Compute embedding with atlas and newdata, but only show newdata
         if embedding == 'tsne':
@@ -137,8 +145,16 @@ class NorthstarRun():
         else:
             raise ValueError('Embedding {:} not supported'.format(embedding))
 
+        with open(logfile, 'a') as f:
+            f.write(' Embedding computed.\n')
+            f.write('Plotting embedding...')
+
         vs['Cell type'] = membership
         plot_embedding(vs, imgfile)
+
+        with open(logfile, 'a') as f:
+            f.write(' Embedding plotted.\n')
+            f.write('Writing output file...')
 
         with open(outfile, 'w') as f:
             f.write('CellID\tCell type\tDimension 1\tDimension 2\n')

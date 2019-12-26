@@ -86,20 +86,23 @@ def progress(path):
             response += '<div class="embeddingWrap"><div class="embeddingInner"><img src="/results/{:}" /></div></div>'.format(
                 os.path.basename(model_wrap.embedimgfile))
 
-            with open(model_wrap.outfile, 'rt') as f:
-                response += '<div class="resultsList">'
-                for line in f:
-                    cellID, cellType, dim1, dim2 = line.rstrip('\n').split('\t')
-                    response += '{:} {:}<br>'.format(cellID, cellType)
-                response += '</div>'
-
             os.remove(model_wrap.logfile)
-            #os.remove(model_wrap.outfile)
 
             return response
+
+        elif 'Writing output file' in log:
+            return 'output'
+        elif 'Plotting embedding' in log:
+            return 'plot'
+        elif 'Calculating embedding' in log:
+            return 'embed'
+        elif 'Computing cell types' in log:
+            return 'cell types'
+        else:
+            return 'start'
+
     else:
-        response = ''
-        return response
+        return ''
 
 
 @app.route('/results/<path>')
